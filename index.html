@@ -43,16 +43,15 @@
     <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
+                <!-- Logo Custom -->
+                <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/30 bg-slate-800">
+                    <img src="res/lildimfx.jpeg" alt="Logo Dimas Store" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/334155/ffffff?text=Logo'">
                 </div>
                 <span class="text-lg sm:text-xl font-bold tracking-tight text-white">Dimas Store RMX</span>
             </div>
             <!-- Info Jumlah Item -->
             <div class="text-xs sm:text-sm text-slate-400 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
-                Total: <span id="itemCount" class="font-semibold text-indigo-400">20</span> Item Tersedia
+                Total: <span id="itemCount" class="font-semibold text-indigo-400">0</span> Item Tersedia
             </div>
         </div>
     </header>
@@ -63,10 +62,10 @@
         <!-- Bagian Judul -->
         <div class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Jelajahi Koleksi Pilihan</h1>
-            <p class="text-slate-400 text-sm sm:text-base mt-1">Temukan game, aplikasi, dan konten digital eksklusif favorit Anda.</p>
+            <p class="text-slate-400 text-sm sm:text-base mt-1">Temukan music favorite anda</p>
         </div>
 
-        <!-- Grid 20 Box Produk -->
+        <!-- Grid Box Produk -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <!-- Data produk akan dirender otomatis melalui JavaScript -->
         </div>
@@ -78,60 +77,125 @@
         <p>&copy; 2026 NexusStore Web Responsive. Hak Cipta Dilindungi.</p>
     </footer>
 
-    <!-- Modal Kustom Interaktif (Pengganti alert()) -->
-    <div id="customModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
-            <div id="modalIcon" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-4 bg-indigo-500/20 text-indigo-400">
-                <!-- Icon diset dinamis -->
+    <!-- Modal Kustom Interaktif (Spotify-style Player) -->
+    <div id="customModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
+            
+            <div class="text-center mb-8">
+                <h3 id="modalTitle" class="text-xl font-bold text-white mb-1 line-clamp-1">Judul Lagu</h3>
+                <p id="modalMessage" class="text-slate-400 text-sm">Sedang diputar</p>
             </div>
-            <h3 id="modalTitle" class="text-lg font-bold text-white mb-2">Judul Notifikasi</h3>
-            <p id="modalMessage" class="text-slate-300 text-sm mb-6">Pesan detail akan tampil di sini.</p>
-            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/30">
-                Tutup
+
+            <!-- Kontrol Player -->
+            <div class="mb-8">
+                <!-- Tombol Navigasi -->
+                <div class="flex items-center justify-center gap-6 mb-4">
+                    <!-- Shuffle -->
+                    <button class="text-slate-400 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    </button>
+                    <!-- Prev -->
+                    <button class="text-slate-300 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                    </button>
+                    <!-- Play/Pause -->
+                    <button onclick="togglePlayPause()" class="w-14 h-14 flex items-center justify-center bg-white text-slate-900 rounded-full hover:scale-105 transition shadow-lg" id="playPauseIconContainer">
+                        <!-- Icon diisi otomatis oleh JS -->
+                    </button>
+                    <!-- Next -->
+                    <button class="text-slate-300 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    </button>
+                    <!-- Repeat -->
+                    <button class="text-slate-400 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </button>
+                </div>
+
+                <!-- Progress Bar & Waktu -->
+                <div class="flex items-center gap-3 text-xs text-slate-400 font-medium">
+                    <span id="currentTimeDisplay" class="w-10 text-right">0:00</span>
+                    <input type="range" id="progressBar" value="0" step="1" min="0" max="100" class="flex-1 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-white hover:accent-indigo-400 focus:outline-none">
+                    <span id="durationDisplay" class="w-10">0:00</span>
+                </div>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-xl transition-all border border-slate-700">
+                Tutup Player
             </button>
         </div>
     </div>
 
-    <!-- JavaScript untuk 20 Data Produk & Interaksi -->
+    <!-- JavaScript Produk & Interaksi -->
     <script>
-        // Array Data 20 Produk / Game / Item
+        // Array Data Produk (Sesuai dengan format baru)
         const products = [
-            { id: 1, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 2, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 3, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 4, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 5, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 6, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 7, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            { id: 8, title: "Dimas Pro", category: "Game", price: "Rp 299.000", desc: "king groza", image: "https://placehold.co/600x400/4f46e5/ffffff?text=Dimas+Pro" },
-            
+            {
+                id: 1, 
+                name: "Mencintai Dengan Ngeyel", 
+                backgroundurl: "res/background/ngeye.png", 
+                musicurl: "res/music/Mencintai_Dengan_Ngeyel.mp3", 
+                price: "Rp 122.000", 
+                deskripsi: "Lagu spesial rmx edit" 
+            },
+
+             {
+                id: 2, 
+                name: "Pergi Hilang dan Lupakan", 
+                backgroundurl: "res/background/sddefault.png", 
+                musicurl: "res/music/Pergi_Hilang_dan_Lupakan.mp3", 
+                price: "Rp 122.000", 
+                deskripsi: "Lagu spesial rmx edit" 
+            },
+
+
+
+            // Tambahkan produk lain di sini sesuai kebutuhan
         ];
 
-        // Fungsi untuk merender produk ke dalam DOM
+        let currentAudio = null;
+        let isDragging = false;
+
+        // Fungsi mengubah format detik menjadi M:SS
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        // Fungsi Render Data ke Grid
         function renderProducts(items) {
             const grid = document.getElementById('productGrid');
             const itemCount = document.getElementById('itemCount');
             
+            if (!grid) return;
+            
             grid.innerHTML = '';
-            itemCount.textContent = items.length;
+            if (itemCount) itemCount.textContent = items.length;
 
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = "product-card bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between";
                 
+                // Escape single quotes untuk mengamankan string di event onclick
+                const safeName = item.name.replace(/'/g, "\\'");
+                const safeMusicUrl = item.musicurl.replace(/'/g, "\\'");
+                const safePrice = item.price.replace(/'/g, "\\'");
+
                 card.innerHTML = `
                     <div>
-                        <!-- Bagian Gambar & Tombol Play Overlay -->
-                        <div class="relative group overflow-hidden aspect-video">
-                            <img src="${item.image}" 
-                                 alt="${item.title}" 
+                        <!-- Cover / Background Gambar -->
+                        <div class="relative group overflow-hidden aspect-video bg-slate-800">
+                            <img src="${item.backgroundurl}" 
+                                 alt="${item.name}" 
                                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                 onerror="this.src='https://placehold.co/600x400/334155/ffffff?text=Image+Not+Found'">
+                                 onerror="this.src='https://placehold.co/600x400/334155/ffffff?text=No+Background'">
                             
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
 
                             <!-- Tombol Play Tengah -->
-                            <button onclick="handlePlay('${item.title}')" 
+                            <button onclick="handlePlay('${safeName}', '${safeMusicUrl}')" 
                                     class="absolute inset-0 m-auto w-12 h-12 bg-indigo-600/90 hover:bg-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all duration-300 focus:outline-none">
                                 <svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z"/>
@@ -142,18 +206,18 @@
                         <!-- Konten Teks -->
                         <div class="p-4 sm:p-5">
                             <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <h3 class="text-base sm:text-lg font-bold text-white tracking-tight line-clamp-1">${item.title}</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-white tracking-tight line-clamp-1">${item.name}</h3>
                             </div>
                             <span class="text-emerald-400 font-bold text-sm sm:text-base block mb-2">${item.price}</span>
                             <p class="text-slate-400 text-xs sm:text-sm line-clamp-2 leading-relaxed mb-2">
-                                ${item.desc}
+                                ${item.deskripsi}
                             </p>
                         </div>
                     </div>
 
-                    <!-- Tombol Aksi Bawah (Play & Buy) -->
+                    <!-- Tombol Aksi Bawah -->
                     <div class="p-4 sm:p-5 pt-0 grid grid-cols-2 gap-2">
-                        <button onclick="handlePlay('${item.title}')" 
+                        <button onclick="handlePlay('${safeName}', '${safeMusicUrl}')" 
                                 class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-medium py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 transition-all">
                             <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
@@ -161,7 +225,7 @@
                             <span>Preview</span>
                         </button>
 
-                        <button onclick="handleBuy('${item.title}')" 
+                        <button onclick="handleBuy('${safeName}', '${safePrice}')" 
                                 class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-medium py-2 px-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-md shadow-indigo-600/30 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -174,28 +238,119 @@
             });
         }
 
-        // Modal Kustom Interaktif
-        function showModal(title, message, type = 'play') {
+        // Handler memutar musik & membuka player modal
+        function handlePlay(name, musicurl) {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            
+            currentAudio = new Audio(musicurl);
+            
+            const progressBar = document.getElementById('progressBar');
+            const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+            const durationDisplay = document.getElementById('durationDisplay');
+
+            // Reset state player UI
+            progressBar.value = 0;
+            currentTimeDisplay.textContent = "0:00";
+            durationDisplay.textContent = "0:00";
+            updatePlayPauseIcon(true); 
+
+            // Load Total Durasi
+            currentAudio.addEventListener('loadedmetadata', () => {
+                durationDisplay.textContent = formatTime(currentAudio.duration);
+                progressBar.max = currentAudio.duration;
+            });
+
+            // Update Progress Bar
+            currentAudio.addEventListener('timeupdate', () => {
+                if (!isDragging) {
+                    currentTimeDisplay.textContent = formatTime(currentAudio.currentTime);
+                    progressBar.value = currentAudio.currentTime;
+                }
+            });
+
+            // Saat lagu selesai
+            currentAudio.addEventListener('ended', () => {
+                updatePlayPauseIcon(false);
+                progressBar.value = 0;
+                currentTimeDisplay.textContent = "0:00";
+            });
+
+            // Interaksi drag pada progress bar
+            progressBar.addEventListener('mousedown', () => isDragging = true);
+            progressBar.addEventListener('touchstart', () => isDragging = true);
+            
+            progressBar.addEventListener('input', (e) => {
+                currentTimeDisplay.textContent = formatTime(e.target.value);
+            });
+
+            progressBar.addEventListener('mouseup', (e) => {
+                isDragging = false;
+                currentAudio.currentTime = e.target.value;
+            });
+            progressBar.addEventListener('touchend', (e) => {
+                isDragging = false;
+                currentAudio.currentTime = e.target.value;
+            });
+
+            // Mulai memutar
+            currentAudio.play().catch(err => {
+                console.log("Gagal memutar audio:", err);
+                updatePlayPauseIcon(false);
+            });
+
+            showModal(name);
+        }
+
+        // Toggle Play/Pause pada tombol Player Modal
+        function togglePlayPause() {
+            if (!currentAudio) return;
+
+            if (currentAudio.paused) {
+                currentAudio.play();
+                updatePlayPauseIcon(true);
+            } else {
+                currentAudio.pause();
+                updatePlayPauseIcon(false);
+            }
+        }
+
+        // Update Icon Play/Pause
+        function updatePlayPauseIcon(isPlaying) {
+            const iconContainer = document.getElementById('playPauseIconContainer');
+            if (isPlaying) {
+                // Icon Pause
+                iconContainer.innerHTML = `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+            } else {
+                // Icon Play
+                iconContainer.innerHTML = `<svg class="w-6 h-6 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+            }
+        }
+
+        // Handler untuk WhatsApp
+        function handleBuy(name, price) {
+            const phoneNumber = "628123456789"; // Ganti dengan nomor WhatsApp asli Anda (Format: 628...)
+            const message = `Halo, saya ingin beli *${name}* dengan harga ${price}`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Tampilkan Modal Player
+        function showModal(title) {
             const modal = document.getElementById('customModal');
             const modalContent = document.getElementById('modalContent');
             const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = document.getElementById('modalMessage');
-            const modalIcon = document.getElementById('modalIcon');
 
             modalTitle.textContent = title;
-            modalMessage.textContent = message;
-
-            if (type === 'play') {
-                modalIcon.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-            } else {
-                modalIcon.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
-            }
 
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modalContent.classList.remove('scale-95');
             modalContent.classList.add('scale-100');
         }
 
+        // Tutup Modal dan Matikan Musik
         function closeModal() {
             const modal = document.getElementById('customModal');
             const modalContent = document.getElementById('modalContent');
@@ -203,20 +358,21 @@
             modal.classList.add('opacity-0', 'pointer-events-none');
             modalContent.classList.remove('scale-100');
             modalContent.classList.add('scale-95');
+
+            // Logika mematikan (pause) musik saat ditutup
+            if (currentAudio) {
+                currentAudio.pause();
+                updatePlayPauseIcon(false);
+            }
         }
 
-        function handlePlay(title) {
-            showModal("Mode Preview", `Memuat demo interaktif untuk "${title}"...`, "play");
-        }
-
-        function handleBuy(title) {
-            showModal("Berhasil Masuk Keranjang", `"${title}" telah berhasil ditambahkan ke keranjang belanja Anda.`, "buy");
-        }
-
-        // Inisialisasi render pertama kali saat halaman dimuat
-        window.onload = function() {
+        // Pastikan renderProducts dipanggil setelah halaman terload
+        document.addEventListener('DOMContentLoaded', () => {
             renderProducts(products);
-        };
+        });
+
+        // Backup jika event DOMContentLoaded terlewat
+        renderProducts(products);
     </script>
 </body>
 </html>
